@@ -8,9 +8,11 @@
  *      Spoonacular API key never ships to the browser.
  *
  * Routes handled here:
- *   GET /api/country?code=IT   -> REST Countries (no key required, but
- *                                  proxied for a single consistent origin,
- *                                  CORS-free requests, and edge caching)
+ *   GET /api/country?code=IT   -> REST Countries v5 (needs a key — see
+ *                                  RESTCOUNTRIES_API_KEY below — proxied
+ *                                  so it never ships to the browser, for a
+ *                                  single consistent origin, CORS-free
+ *                                  requests, and edge caching)
  *   GET /api/recipe?cuisine=Italian
  *                               -> Spoonacular complexSearch, enriched
  *                                  with recipe information (needs a key)
@@ -31,7 +33,7 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/country") {
-      return withEdgeCache(request, ctx, COUNTRY_CACHE_SECONDS, () => handleCountry(url));
+      return withEdgeCache(request, ctx, COUNTRY_CACHE_SECONDS, () => handleCountry(url, env));
     }
 
     if (url.pathname === "/api/recipe") {
@@ -76,18 +78,32 @@ async function withEdgeCache(request, ctx, maxAgeSeconds, handler) {
 /* REST Countries                                                        */
 /* -------------------------------------------------------------------- */
 
-async function handleCountry(url) {
+// REST Countries retired v1–v4 (including the v3.1 endpoint this used to
+// call) in favor of v5 at a new host, api.restcountries.com. v5 needs an
+// Authorization: Bearer key on every request and returns a differently
+// shaped payload (data.objects[], with nested names.common / capitals[] /
+// flag.url_png instead of the old flat name.common / capital[] / flags.png).
+//
+// 🔑 For reliable production use, get a free key at https://restcountries.com/sign-up
+// and run:  wrangler secret put RESTCOUNTRIES_API_KEY
+// Without one, this falls back to the public demo key (rc_live_demo), which
+// is rate-limited and meant for verifying connectivity, not steady traffic.
+async function handleCountry(url, env) {
   const code = (url.searchParams.get("code") || "").trim();
   if (!/^[A-Za-z]{2,3}$/.test(code)) {
     return jsonError("Provide a valid ISO country code, e.g. ?code=IT", 400);
   }
 
-  const fields = "name,capital,region,subregion,population,languages,flags";
-  const upstream = `https://restcountries.com/v3.1/alpha/${encodeURIComponent(code)}?fields=${fields}`;
+  const property = code.length === 2 ? "codes.alpha_2" : "codes.alpha_3";
+  const fields = "names.common,capitals,region,subregion,population,languages,flag.url_png,flag.url_svg";
+  const upstream = `https://api.restcountries.com/countries/v5/${property}/${encodeURIComponent(code.toUpperCase())}?response_fields=${fields}`;
+  const apiKey = env?.RESTCOUNTRIES_API_KEY || "rc_live_demo";
 
   let res;
   try {
-    res = await fetch(upstream, { headers: { accept: "application/json" } });
+    res = await fetch(upstream, {
+      headers: { accept: "application/json", authorization: `Bearer ${apiKey}` },
+    });
   } catch (e) {
     return jsonError("Could not reach the country data service.", 502);
   }
@@ -97,17 +113,19 @@ async function handleCountry(url) {
   }
 
   const raw = await res.json();
-  const data = Array.isArray(raw) ? raw[0] : raw;
+  const data = raw?.data?.objects?.[0];
   if (!data) return jsonError("No country data found for that code.", 404);
 
   const shaped = {
-    name: data.name?.common || code,
-    capital: Array.isArray(data.capital) ? data.capital[0] : data.capital,
+    name: data.names?.common || code,
+    capital: data.capitals?.[0]?.name,
     region: data.region,
     subregion: data.subregion,
     population: data.population,
-    languages: data.languages ? Object.values(data.languages).join(", ") : null,
-    flag: data.flags?.png || data.flags?.svg,
+    languages: Array.isArray(data.languages)
+      ? data.languages.map((l) => l.name || l.english_name || l.common || l.native_name).filter(Boolean).join(", ")
+      : null,
+    flag: data.flag?.url_png || data.flag?.url_svg,
   };
 
   return new Response(JSON.stringify(shaped), { status: 200, headers: JSON_HEADERS });

@@ -16,9 +16,15 @@ binding = "ASSETS"
 # dashboard instead):
 #
 #   wrangler secret put SPOONACULAR_API_KEY
+#   wrangler secret put RESTCOUNTRIES_API_KEY
 #
 # Get a free Spoonacular key at https://spoonacular.com/food-api
-# The Worker reads it as env.SPOONACULAR_API_KEY (see src/worker.js).
+# Get a free REST Countries key at https://restcountries.com/sign-up
+#   (REST Countries retired its old open v1–v4 endpoints; v5 requires a key.
+#   Without RESTCOUNTRIES_API_KEY set, the Worker falls back to the public
+#   rc_live_demo key, which is fine for testing but rate-limited.)
+# The Worker reads them as env.SPOONACULAR_API_KEY / env.RESTCOUNTRIES_API_KEY
+# (see src/worker.js).
 # ---------------------------------------------------------------------------
 
 [vars]
