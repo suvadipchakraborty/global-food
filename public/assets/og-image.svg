@@ -1,0 +1,55 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F2A2E"/>
+      <stop offset="100%" stop-color="#123338"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#1c4a51" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0F2A2E" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- graticule grid -->
+  <g stroke="#F3EEDF" stroke-opacity="0.08" stroke-width="1">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="150" y1="0" x2="150" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="450" y1="0" x2="450" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="750" y1="0" x2="750" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1050" y1="0" x2="1050" y2="630"/>
+  </g>
+
+  <!-- dotted route -->
+  <path d="M 160 420 Q 400 250 620 360 T 1040 220" fill="none" stroke="#E8A33D" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- markers -->
+  <g>
+    <circle cx="160" cy="420" r="9" fill="#C9432D"/>
+    <circle cx="160" cy="420" r="16" fill="none" stroke="#C9432D" stroke-width="2" opacity="0.5"/>
+    <circle cx="620" cy="360" r="9" fill="#E8A33D"/>
+    <circle cx="620" cy="360" r="16" fill="none" stroke="#E8A33D" stroke-width="2" opacity="0.5"/>
+    <circle cx="1040" cy="220" r="9" fill="#E8A33D"/>
+    <circle cx="1040" cy="220" r="16" fill="none" stroke="#E8A33D" stroke-width="2" opacity="0.5"/>
+  </g>
+
+  <!-- pin glyph -->
+  <g transform="translate(150,150)">
+    <circle cx="0" cy="0" r="46" fill="#E8A33D"/>
+    <path d="M -22 32 L 22 32 L 0 78 Z" fill="#E8A33D"/>
+    <circle cx="0" cy="0" r="24" fill="#0F2A2E"/>
+    <circle cx="0" cy="0" r="9" fill="#C9432D"/>
+  </g>
+
+  <text x="270" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="66" fill="#FBF6EC" font-weight="600">Culinary Geography</text>
+  <text x="270" y="220" font-family="Georgia, 'Times New Roman', serif" font-size="66" fill="#E8A33D" font-weight="600">Explorer</text>
+  <text x="150" y="290" font-family="Verdana, Geneva, sans-serif" font-size="28" fill="#CFE3E0" opacity="0.85">Tap a country. Taste its story.</text>
+</svg>

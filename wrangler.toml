@@ -1,0 +1,26 @@
+name = "global-food"
+main = "src/worker.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Serves everything in ./public as static assets. Requests that don't match
+# a file on disk fall through to the Worker's fetch handler in src/worker.js,
+# which is how /api/* stays dynamic while index.html, css, js, and icons are
+# served straight from the edge.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# ---------------------------------------------------------------------------
+# Secrets (never commit real keys — set them via the CLI or the Cloudflare
+# dashboard instead):
+#
+#   wrangler secret put SPOONACULAR_API_KEY
+#
+# Get a free Spoonacular key at https://spoonacular.com/food-api
+# The Worker reads it as env.SPOONACULAR_API_KEY (see src/worker.js).
+# ---------------------------------------------------------------------------
+
+[vars]
+# Non-secret configuration can go here if you need it later, e.g.:
+# ENVIRONMENT = "production"
