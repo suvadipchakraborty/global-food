@@ -278,6 +278,14 @@ img { max-width: 100%; display: block; }
 .grat-line { stroke: rgba(243, 238, 223, 0.10); stroke-width: 0.5; }
 .grat-line--equator { stroke: rgba(243, 238, 223, 0.18); }
 
+.landmass {
+  fill: var(--ink-600);
+  fill-opacity: 0.55;
+  stroke: rgba(243, 238, 223, 0.16);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
 .route-line {
   fill: none;
   stroke: var(--saffron);
