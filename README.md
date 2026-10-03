@@ -9,7 +9,7 @@ installable as a home-screen app, and built to deploy straight to Cloudflare.
 - **Frontend:** vanilla HTML/CSS/JS, no build step, no framework — `public/`
 - **Backend:** a single Cloudflare Worker (`src/worker.js`) that serves the
   static site and proxies two APIs so no key ever reaches the browser:
-  - [REST Countries](https://restcountries.com/) for demographics (no key needed)
+  - [REST Countries](https://restcountries.com/) for demographics (optional key; built-in data is used without one)
   - [Spoonacular](https://spoonacular.com/food-api) for recipes (needs a free key)
 - **PWA:** `manifest.webmanifest` + `sw.js` so it can be added to a phone's
   home screen and opens offline-tolerant.

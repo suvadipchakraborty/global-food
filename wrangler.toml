@@ -21,8 +21,9 @@ binding = "ASSETS"
 # Get a free Spoonacular key at https://spoonacular.com/food-api
 # Get a free REST Countries key at https://restcountries.com/sign-up
 #   (REST Countries retired its old open v1–v4 endpoints; v5 requires a key.
-#   Without RESTCOUNTRIES_API_KEY set, the Worker falls back to the public
-#   rc_live_demo key, which is fine for testing but rate-limited.)
+#   Without RESTCOUNTRIES_API_KEY set, the Worker serves built-in country
+#   facts. The public rc_live_demo key is NOT used: it returns a Canada
+#   sample for every request.)
 # The Worker reads them as env.SPOONACULAR_API_KEY / env.RESTCOUNTRIES_API_KEY
 # (see src/worker.js).
 # ---------------------------------------------------------------------------

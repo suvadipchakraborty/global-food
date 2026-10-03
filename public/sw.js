@@ -5,7 +5,7 @@
  * that data should stay fresh (the Worker already edge-caches it).
  */
 
-const CACHE_NAME = "culinary-geo-shell-v1";
+const CACHE_NAME = "culinary-geo-shell-v3";
 const SHELL_FILES = [
   "/",
   "/index.html",

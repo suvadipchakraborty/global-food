@@ -248,9 +248,10 @@
 
   function stripHtml(str) {
     if (!str) return "";
-    const div = document.createElement("div");
-    div.innerHTML = str;
-    return div.textContent || div.innerText || "";
+    // DOMParser builds an inert document: no scripts run and no images load,
+    // unlike setting innerHTML on a live element.
+    const doc = new DOMParser().parseFromString(String(str), "text/html");
+    return doc.body.textContent || "";
   }
 
   function formatPopulation(n) {
@@ -270,8 +271,8 @@
     openSheet();
 
     const [countryResult, recipeResult] = await Promise.allSettled([
-      fetch(`/api/country?code=${encodeURIComponent(country.code)}`).then(assertOk),
-      fetch(`/api/recipe?cuisine=${encodeURIComponent(country.cuisine)}`).then(assertOk),
+      fetch(`/api/country?code=${encodeURIComponent(country.code)}&v=2`).then(assertOk),
+      fetch(`/api/recipe?cuisine=${encodeURIComponent(country.cuisine)}`, { cache: "no-store" }).then(assertOk),
     ]);
 
     // Bail out silently if the person tapped a different marker while this was loading.
